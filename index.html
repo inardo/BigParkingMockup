@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigParking.com - Website Mockup</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Inline SVG icons as components
+        const MenuIcon = () => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        );
+
+        const XIcon = () => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
+
+        const ChevronRightIcon = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        );
+
+        const CheckCircleIcon = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        );
+
+        const QrCodeIcon = () => (
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+        );
+
+        const Building2Icon = () => (
+            <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                <path d="M9 22v-4h6v4"></path>
+                <path d="M8 6h.01"></path>
+                <path d="M16 6h.01"></path>
+                <path d="M12 6h.01"></path>
+                <path d="M12 10h.01"></path>
+                <path d="M12 14h.01"></path>
+                <path d="M16 10h.01"></path>
+                <path d="M16 14h.01"></path>
+                <path d="M8 10h.01"></path>
+                <path d="M8 14h.01"></path>
+            </svg>
+        );
+
+        const CarIcon = () => (
+            <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 17h14v2H5z"></path>
+                <path d="M5 11l1.5-4.5h11L19 11"></path>
+                <path d="M5 11v6h14v-6"></path>
+                <circle cx="7.5" cy="14.5" r="1.5"></circle>
+                <circle cx="16.5" cy="14.5" r="1.5"></circle>
+            </svg>
+        );
+
+        const CalendarIcon = () => (
+            <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        );
+
+        const PhoneIcon = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+        );
+
+        const MailIcon = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+        );
+
+        const MapPinIcon = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+        );
+
+        function BigParkingMockup() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                phone: '',
+                business: '',
+                address: '',
+                serviceType: '',
+                stalls: '',
+                comments: ''
+            });
+
+            const Navigation = () => (
+                <nav className="bg-black text-white sticky top-0 z-50 shadow-lg">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
+                            <div className="flex items-center">
+                                <div className="text-3xl font-bold">
+                                    <span className="text-orange-500">BIG</span>
+                                    <span className="text-white">PARKING</span>
+                                </div>
+                            </div>
+                            
+                            <div className="hidden md:flex space-x-8">
+                                <button onClick={() => setCurrentPage('home')} className={`hover:text-orange-500 transition-colors ${currentPage === 'home' ? 'text-orange-500' : ''}`}>Home</button>
+                                <button onClick={() => setCurrentPage('services')} className={`hover:text-orange-500 transition-colors ${currentPage === 'services' ? 'text-orange-500' : ''}`}>Services</button>
+                                <button onClick={() => setCurrentPage('partner')} className={`hover:text-orange-500 transition-colors ${currentPage === 'partner' ? 'text-orange-500' : ''}`}>Partner With Us</button>
+                                <button onClick={() => setCurrentPage('contact')} className={`hover:text-orange-500 transition-colors ${currentPage === 'contact' ? 'text-orange-500' : ''}`}>Contact</button>
+                            </div>
+
+                            <div className="md:hidden">
+                                <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                                    {mobileMenuOpen ? <XIcon /> : <MenuIcon />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {mobileMenuOpen && (
+                            <div className="md:hidden pb-4">
+                                <button onClick={() => { setCurrentPage('home'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 hover:text-orange-500">Home</button>
+                                <button onClick={() => { setCurrentPage('services'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 hover:text-orange-500">Services</button>
+                                <button onClick={() => { setCurrentPage('partner'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 hover:text-orange-500">Partner With Us</button>
+                                <button onClick={() => { setCurrentPage('contact'); setMobileMenuOpen(false); }} className="block w-full text-left py-2 hover:text-orange-500">Contact</button>
+                            </div>
+                        )}
+                    </div>
+                </nav>
+            );
+
+            const Footer = () => (
+                <footer className="bg-black text-white mt-16">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div>
+                                <div className="text-2xl font-bold mb-4">
+                                    <span className="text-orange-500">BIG</span>
+                                    <span className="text-white">PARKING</span>
+                                </div>
+                                <p className="text-gray-400">Smart Parking. Big Solutions.</p>
+                                <p className="text-gray-400 mt-2">Serving Hawaii with innovative parking management</p>
+                            </div>
+                            
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4 text-orange-500">Quick Links</h3>
+                                <div className="space-y-2">
+                                    <button onClick={() => setCurrentPage('home')} className="block hover:text-orange-500 transition-colors">Home</button>
+                                    <button onClick={() => setCurrentPage('services')} className="block hover:text-orange-500 transition-colors">Services</button>
+                                    <button onClick={() => setCurrentPage('partner')} className="block hover:text-orange-500 transition-colors">Partner With Us</button>
+                                    <a href="https://waikikiparking.com" target="_blank" rel="noopener noreferrer" className="block hover:text-orange-500 transition-colors">WaikikiParking.com</a>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4 text-orange-500">Contact</h3>
+                                <div className="space-y-2 text-gray-400">
+                                    <div className="flex items-center gap-2">
+                                        <PhoneIcon />
+                                        <span>(808) 555-PARK</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <MailIcon />
+                                        <span>info@bigparking.com</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <MapPinIcon />
+                                        <span>Honolulu, Hawaii</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                            <p>&copy; 2025 Big Parking. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+            );
+
+            const HomePage = () => (
+                <div>
+                    <div className="relative bg-black text-white py-20 overflow-hidden">
+                        <div className="absolute inset-0 opacity-40">
+                            <img 
+                                src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1920&q=80" 
+                                alt="Modern parking lot"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+                        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center">
+                                <h1 className="text-5xl md:text-7xl font-bold mb-6">
+                                    <span className="text-orange-500">Smart Parking.</span>
+                                    <br />
+                                    <span className="text-white">Big Solutions.</span>
+                                </h1>
+                                <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                                    Revolutionary QR-code parking technology and comprehensive lot management for Hawaii's property owners and businesses
+                                </p>
+                                <button 
+                                    onClick={() => setCurrentPage('contact')}
+                                    className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2 shadow-lg"
+                                >
+                                    Get Started Today
+                                    <ChevronRightIcon />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 bg-white">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-12">
+                                <h2 className="text-4xl font-bold text-black mb-4">Modern Parking Technology</h2>
+                                <p className="text-xl text-gray-600">Simplify parking management with our innovative QR-code system</p>
+                            </div>
+                            
+                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <div className="relative bg-gray-100 h-96 rounded-lg overflow-hidden shadow-xl">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" 
+                                            alt="Person scanning QR code"
+                                            className="w-full h-full object-cover opacity-30"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="text-center bg-white/90 p-8 rounded-lg border-4 border-dashed border-orange-500">
+                                                <QrCodeIcon />
+                                                <p className="text-lg font-bold text-gray-700 mt-4">Your QR Signage<br/>Photo Here</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="space-y-6">
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-orange-500 rounded-full p-3 mt-1">
+                                            <CheckCircleIcon />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-semibold mb-2">Contactless Payments</h3>
+                                            <p className="text-gray-600">Customers scan QR codes to pay instantly from their phones</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-orange-500 rounded-full p-3 mt-1">
+                                            <CheckCircleIcon />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-semibold mb-2">Real-Time Monitoring</h3>
+                                            <p className="text-gray-600">Track occupancy, revenue, and analytics from anywhere</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-orange-500 rounded-full p-3 mt-1">
+                                            <CheckCircleIcon />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-semibold mb-2">No Equipment Costs</h3>
+                                            <p className="text-gray-600">Minimal infrastructure required - we handle everything</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 bg-gray-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-12">
+                                <h2 className="text-4xl font-bold text-black mb-4">Our Services</h2>
+                                <p className="text-xl text-gray-600">Comprehensive parking solutions for every need</p>
+                            </div>
+                            
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                                    <div className="relative h-48 bg-gradient-to-br from-orange-500 to-orange-600">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" 
+                                            alt="QR Code parking"
+                                            className="w-full h-full object-cover opacity-50"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                                <rect x="3" y="3" width="7" height="7"></rect>
+                                                <rect x="14" y="3" width="7" height="7"></rect>
+                                                <rect x="14" y="14" width="7" height="7"></rect>
+                                                <rect x="3" y="14" width="7" height="7"></rect>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="p-8">
+                                        <h3 className="text-2xl font-bold mb-4">QR Parking Management</h3>
+                                        <p className="text-gray-600">Modern, contactless parking with real-time tracking and automated payments</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                                    <div className="relative h-48 bg-gradient-to-br from-black to-gray-800">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80" 
+                                            alt="Property management"
+                                            className="w-full h-full object-cover opacity-40"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="p-8">
+                                        <h3 className="text-2xl font-bold mb-4">Property Partnerships</h3>
+                                        <p className="text-gray-600">Full-service lot management with customized revenue-share models</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                                    <div className="relative h-48 bg-gradient-to-br from-orange-500 to-orange-600">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80" 
+                                            alt="Valet parking"
+                                            className="w-full h-full object-cover opacity-50"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                                <path d="M5 17h14v2H5z"></path>
+                                                <path d="M5 11l1.5-4.5h11L19 11"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="p-8">
+                                        <h3 className="text-2xl font-bold mb-4">Valet & Event Parking</h3>
+                                        <p className="text-gray-600">Professional valet services and event parking management solutions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="text-center mt-12">
+                                <button 
+                                    onClick={() => setCurrentPage('services')}
+                                    className="bg-black hover:bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+                                >
+                                    View All Services
+                                    <ChevronRightIcon />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-16 bg-orange-500 text-white">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Parking?</h2>
+                            <p className="text-xl mb-8 max-w-2xl mx-auto">Join Hawaii's leading property owners who trust Big Parking for modern, efficient parking management</p>
+                            <button 
+                                onClick={() => setCurrentPage('partner')}
+                                className="bg-white hover:bg-gray-100 text-orange-500 px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                            >
+                                Partner With Us
+                                <ChevronRightIcon />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const ServicesPage = () => (
+                <div className="py-16">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h1 className="text-5xl font-bold text-black mb-6">Our Services</h1>
+                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive parking solutions designed for Hawaii's unique market</p>
+                        </div>
+
+                        <div className="mb-16 bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div className="md:flex">
+                                <div className="md:w-1/2 relative bg-gradient-to-br from-orange-500 to-orange-600 p-12 flex items-center justify-center">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" 
+                                        alt="QR parking technology"
+                                        className="absolute inset-0 w-full h-full object-cover opacity-20"
+                                    />
+                                    <div className="relative text-center bg-white/10 backdrop-blur-sm p-8 rounded-lg border-4 border-dashed border-white">
+                                        <QrCodeIcon />
+                                        <p className="text-xl font-bold text-white mt-4">Your Big Parking<br/>QR Signage Here</p>
+                                    </div>
+                                </div>
+                                <div className="md:w-1/2 p-12">
+                                    <h2 className="text-3xl font-bold mb-4">QR-Code Parking Management</h2>
+                                    <p className="text-gray-600 mb-6">Our flagship service brings cutting-edge technology to parking management. Customers simply scan a QR code to pay, while you get real-time insights and automated revenue collection.</p>
+                                    <ul className="space-y-3">
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircleIcon />
+                                            <span>Contactless payment processing</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircleIcon />
+                                            <span>Real-time occupancy tracking</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircleIcon />
+                                            <span>Automated revenue reporting</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <CheckCircleIcon />
+                                            <span>Dynamic pricing capabilities</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-lg p-12 text-center">
+                            <h2 className="text-3xl font-bold mb-4">Customized Pricing</h2>
+                            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                                Every property is unique. We create customized pricing and revenue-share models tailored to your specific needs, lot size, and business goals.
+                            </p>
+                            <button 
+                                onClick={() => setCurrentPage('contact')}
+                                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+                            >
+                                Get Your Custom Quote
+                                <ChevronRightIcon />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const PartnerPage = () => (
+                <div className="py-16">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h1 className="text-5xl font-bold text-black mb-6">Partner With Us</h1>
+                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Transform your parking into a revenue-generating asset with Hawaii's most innovative parking management company</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8 mb-16">
+                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                                <div className="h-48 bg-gradient-to-br from-green-500 to-emerald-600 relative overflow-hidden">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1554224311-beee460ae6ba?w=600&q=80" 
+                                        alt="Revenue growth"
+                                        className="w-full h-full object-cover opacity-40"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-white text-6xl font-bold">$$$</span>
+                                    </div>
+                                </div>
+                                <div className="p-8">
+                                    <h3 className="text-2xl font-bold mb-3">Maximize Revenue</h3>
+                                    <p className="text-gray-600">Our smart pricing and efficient operations increase parking revenue by an average of 30-40% compared to traditional management.</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                                <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-600 relative overflow-hidden">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80" 
+                                        alt="No upfront costs"
+                                        className="w-full h-full object-cover opacity-40"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-white text-6xl font-bold">$0</span>
+                                    </div>
+                                </div>
+                                <div className="p-8">
+                                    <h3 className="text-2xl font-bold mb-3">Zero Upfront Costs</h3>
+                                    <p className="text-gray-600">We handle all equipment, technology, and infrastructure investments. You earn from day one without capital expenditure.</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                                <div className="h-48 bg-gradient-to-br from-purple-500 to-purple-600 relative overflow-hidden">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80" 
+                                        alt="Full service management"
+                                        className="w-full h-full object-cover opacity-40"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <CheckCircleIcon />
+                                    </div>
+                                </div>
+                                <div className="p-8">
+                                    <h3 className="text-2xl font-bold mb-3">Full-Service Management</h3>
+                                    <p className="text-gray-600">From maintenance to customer service, we handle everything so you can focus on your core business.</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                                <div className="h-48 bg-gradient-to-br from-orange-500 to-orange-600 relative overflow-hidden">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" 
+                                        alt="Real-time analytics"
+                                        className="w-full h-full object-cover opacity-40"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-white text-6xl">📊</span>
+                                    </div>
+                                </div>
+                                <div className="p-8">
+                                    <h3 className="text-2xl font-bold mb-3">Real-Time Analytics</h3>
+                                    <p className="text-gray-600">Access detailed reports and live data about your parking operations anytime, anywhere.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-12 text-white text-center">
+                            <h2 className="text-3xl font-bold mb-4">Ready to Partner?</h2>
+                            <p className="text-xl mb-8">Let's discuss how Big Parking can maximize your parking revenue</p>
+                            <button 
+                                onClick={() => setCurrentPage('contact')}
+                                className="bg-white hover:bg-gray-100 text-orange-500 px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+                            >
+                                Contact Us Today
+                                <ChevronRightIcon />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const ContactPage = () => {
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    alert('Form submitted! (This is a mockup - in the live site, this would email the information to your inbox)');
+                };
+
+                const handleChange = (e) => {
+                    setFormData({ ...formData, [e.target.name]: e.target.value });
+                };
+
+                return (
+                    <div className="py-16">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-16">
+                                <h1 className="text-5xl font-bold text-black mb-6">Contact Us</h1>
+                                <p className="text-xl text-gray-600 max-w-3xl mx-auto">Ready to transform your parking? Get in touch and let's discuss your needs</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-12">
+                                <div className="bg-white rounded-lg shadow-lg p-8">
+                                    <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
+                                    <form onSubmit={handleSubmit} className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-semibold mb-2">Name *</label>
+                                            <input 
+                                                type="text" 
+                                                name="name"
+                                                required
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                                placeholder="Your name"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold mb-2">Email *</label>
+                                            <input 
+                                                type="email" 
+                                                name="email"
+                                                required
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                                placeholder="your.email@example.com"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold mb-2">Phone Number *</label>
+                                            <input 
+                                                type="tel" 
+                                                name="phone"
+                                                required
+                                                value={formData.phone}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                                placeholder="(808) 555-1234"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold mb-2">Business or Property Name *</label>
+                                            <input 
+                                                type="text" 
+                                                name="business"
+                                                required
+                                                value={formData.business}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                                placeholder="Your business name"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold mb-2">Service Type *</label>
+                                            <select 
+                                                name="serviceType"
+                                                required
+                                                value={formData.serviceType}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                            >
+                                                <option value="">Select a service</option>
+                                                <option value="qr">QR Parking Management</option>
+                                                <option value="valet">Valet Services</option>
+                                                <option value="event">Event Parking</option>
+                                                <option value="monthly">Monthly Management</option>
+                                            </select>
+                                        </div>
+
+                                        <button 
+                                            type="submit"
+                                            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition-colors"
+                                        >
+                                            Submit Request
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div>
+                                    <div className="bg-black text-white rounded-lg p-8 mb-8">
+                                        <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
+                                        <div className="space-y-6">
+                                            <div className="flex items-start gap-4">
+                                                <PhoneIcon />
+                                                <div>
+                                                    <h3 className="font-semibold mb-1">Phone</h3>
+                                                    <p className="text-gray-300">(808) 555-PARK</p>
+                                                    <p className="text-sm text-gray-400">Mon-Fri: 8am-6pm HST</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-4">
+                                                <MailIcon />
+                                                <div>
+                                                    <h3 className="font-semibold mb-1">Email</h3>
+                                                    <p className="text-gray-300">info@bigparking.com</p>
+                                                    <p className="text-sm text-gray-400">We respond within 24 hours</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-4">
+                                                <MapPinIcon />
+                                                <div>
+                                                    <h3 className="font-semibold mb-1">Location</h3>
+                                                    <p className="text-gray-300">Honolulu, Hawaii</p>
+                                                    <p className="text-sm text-gray-400">Serving all of Oahu</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-orange-500 text-white rounded-lg p-8">
+                                        <h3 className="text-xl font-bold mb-4">Why Choose Big Parking?</h3>
+                                        <ul className="space-y-3">
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircleIcon />
+                                                <span>Hawaii's most advanced parking technology</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircleIcon />
+                                                <span>Customized revenue-share models</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircleIcon />
+                                                <span>Zero upfront investment required</span>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <CheckCircleIcon />
+                                                <span>24/7 customer support</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-100">
+                    <Navigation />
+                    
+                    {currentPage === 'home' && <HomePage />}
+                    {currentPage === 'services' && <ServicesPage />}
+                    {currentPage === 'partner' && <PartnerPage />}
+                    {currentPage === 'contact' && <ContactPage />}
+                    
+                    <Footer />
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<BigParkingMockup />);
+    </script>
+</body>
+</html>
